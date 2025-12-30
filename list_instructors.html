@@ -1,0 +1,44 @@
+{% load extras %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instructors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Scheduler Admin</a>
+  </div>
+</nav>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fa fa-users"></i> Instructors</h2>
+        <a href="{% url 'add_instructor' %}" class="btn btn-success"><i class="fa fa-plus"></i> Add Instructor</a>
+    </div>
+    <table class="table table-bordered table-hover shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th style="width: 180px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for instructor in instructors %}
+            <tr>
+                <td>{{ instructor.name }}</td>
+                <td>
+                    <a href="{% url 'edit_instructor' instructor.pk %}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                    <a href="{% url 'delete_instructor' instructor.pk %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="2">No instructors found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

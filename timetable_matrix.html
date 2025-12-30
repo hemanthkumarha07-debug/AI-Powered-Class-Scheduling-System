@@ -1,0 +1,57 @@
+{% load extras %}  {# custom get_item template filter needed #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weekly Timetable (Matrix)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        th, td { text-align: center; font-size: 1.02em; vertical-align: middle; }
+        .remedial { color: red; }
+        .lunch { background: #f7f7b5; }
+        .period-header { font-size: 0.92em; }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h3 class="mb-3">{{ classroom.name }} – Weekly Timetable</h3>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Day</th>
+                {% for slot in periods %}
+                    <th>
+                        {{ slot.0 }}<br>
+                        <span class="period-header">{{ slot.1 }}</span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for day in days %}
+            <tr>
+                <th>{{ day }}</th>
+                {% for period, _ in periods %}
+                    {% with entry=grid|get_item:day|get_item:period %}
+                        {% if entry %}
+                            <td>
+                                <span {% if entry.is_remedial %}class="remedial"{% endif %}>
+                                    {{ entry.course.code }}<br>
+                                    {{ entry.course.name|truncatechars:12 }}<br>
+                                    {{ entry.course.instructor.name|truncatechars:10 }}
+                                </span>
+                            </td>
+                        {% elif period == "13:00-14:00" %}
+                            <td class="lunch">LUNCH BREAK</td>
+                        {% else %}
+                            <td>–</td>
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
